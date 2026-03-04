@@ -1,6 +1,47 @@
 @import "tailwindcss";
 
-/* Hide Vercel or Netlify toolbars */
+@theme {
+    /* Colors */
+    --color-brand-white: var(--background-white);
+    --color-brand-cream: var(--background-cream);
+    --color-brand-nav: var(--nav-bg);
+    --color-brand-heading: var(--color-heading);
+    --color-brand-paragraph: var(--color-paragraph);
+    --color-brand-button: var(--color-button);
+    --color-brand-button-hover: var(--color-button-hover);
+
+    /* Fonts */
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+
+    /* Custom Animations/Effects */
+    --animate-fade-in: fade-in 0.5s ease-out;
+
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+:root {
+    --background-white: #ffffff;
+    --background-cream: #faf3e1;
+    --nav-bg: #ffffff;
+    --color-heading: #000000;
+    --color-paragraph: #4b5563;
+    --color-button: #4e1f00;
+    --color-button-hover: #3a1700;
+}
+
+/* Hide Developer Overlays/Toolbars if needed */
 #vercel-toolbar-container,
 .netlify-drawer-container,
 [id^="vercel-"],
@@ -10,4 +51,36 @@
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
+}
+
+body {
+    background-color: var(--background-white);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-heading);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+/* Paragraph */
+p {
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+button,
+a {
+    transition: all 0.3s ease-in-out;
+    font-family: var(--font-sans);
 }
