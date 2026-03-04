@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Info, BookOpen, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 const BottomNavbar = () => {
     const pathname = usePathname();
+    const [cartCount, setCartCount] = useState(0);
 
     const navItems = [
         { icon: Home, label: 'Home', href: '/' },
@@ -74,9 +76,9 @@ const BottomNavbar = () => {
                                                 : 'text-[#282C3F]/80'
                                                 } transition-colors duration-300`}
                                         />
-                                        {item.label === 'Bag' && (
+                                        {item.label === 'Bag' && cartCount > 0 && (
                                             <span className="absolute -top-1.5 -right-1.5 bg-brand-button text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                                                0
+                                                {cartCount}
                                             </span>
                                         )}
                                     </div>

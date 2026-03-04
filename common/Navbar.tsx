@@ -2,13 +2,16 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Heart, ShoppingBag, User, Menu, X, Search } from 'lucide-react';
+import { Heart, ShoppingBag, User, Menu, X, Search, CircleUserRound } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+
   const pathname = usePathname();
 
   const navLinks = [
@@ -25,8 +28,16 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    const handleToggleSearch = () => {
+      setIsSearchOpen(prev => !prev);
+      setIsMobileMenuOpen(false);
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('toggle-search', handleToggleSearch);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('toggle-search', handleToggleSearch);
+    };
   }, []);
 
   return (
@@ -144,18 +155,31 @@ const Navbar = () => {
             {/* Wishlist */}
             <button className="text-brand-paragraph hover:text-brand-heading p-2 rounded-full hover:bg-zinc-100 transition-all relative group cursor-pointer">
               <Heart size={22} strokeWidth={2} />
-              <span className="absolute -top-0 -right-0 bg-brand-button text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                0
-              </span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-0 -right-0 bg-brand-button text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
             </button>
 
-            {/* Cart */}
-            <button className="text-brand-paragraph hover:text-brand-heading p-2 rounded-full hover:bg-zinc-100 transition-all relative cursor-pointer">
+
+            {/* Cart - Hidden on mobile (<= 426px), replaced by User icon */}
+            <button className="max-[426px]:hidden text-brand-paragraph hover:text-brand-heading p-2 rounded-full hover:bg-zinc-100 transition-all relative cursor-pointer">
               <ShoppingBag size={22} strokeWidth={2} />
-              <span className="absolute -top-0 -right-0 bg-brand-button text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                0
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-0 -right-0 bg-brand-button text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </button>
+
+            {/* Login/Signup Icon - Visible only on mobile (<= 426px) */}
+            <Link
+              href="/login"
+              className="hidden max-[426px]:flex text-brand-paragraph hover:text-brand-heading p-2 rounded-full hover:bg-zinc-100 transition-all relative cursor-pointer"
+            >
+              <CircleUserRound size={23} strokeWidth={2} />
+            </Link>
 
             {/* Profile/Login */}
             <Link
