@@ -38,8 +38,8 @@ const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`w-full transition-all duration-500 ease-in-out border-b ${isScrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-sm border-zinc-200/50 py-2 px-6'
-          : 'bg-transparent border-transparent py-4 px-8 max-[769px]:px-4 max-[426px]:px-2 max-[426px]:py-2'
+          ? 'bg-white/80 backdrop-blur-xl shadow-sm border-zinc-200/50 py-2 px-6 max-[426px]:px-2'
+          : 'bg-transparent border-transparent py-4 px-8 max-[769px]:px-4 max-[426px]:px-2 max-[426px]:py-0'
           }`}
       >
         <div className="w-full flex justify-between items-center h-16">
