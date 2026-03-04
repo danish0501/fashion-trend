@@ -2,9 +2,10 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, UserRound, Baby, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import Image from 'next/image';
 
 const CategoryNavbar = () => {
     const pathname = usePathname();
@@ -13,9 +14,9 @@ const CategoryNavbar = () => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const categories = [
-        { icon: User, label: 'Men', href: '/men' },
-        { icon: UserRound, label: 'Women', href: '/women' },
-        { icon: Baby, label: 'Kids', href: '/kids' },
+        { label: 'Men', href: '/men', image: '/assets/category-navbar/man.png' },
+        { label: 'Women', href: '/women', image: '/assets/category-navbar/woman.png' },
+        { label: 'Kids', href: '/kids', image: '/assets/category-navbar/kids.png' },
     ];
 
     useEffect(() => {
@@ -43,14 +44,13 @@ const CategoryNavbar = () => {
                             className="flex items-center w-full"
                         >
                             {categories.map((item) => {
-                                const Icon = item.icon;
                                 const isActive = pathname === item.href;
 
                                 return (
                                     <Link
                                         key={item.label}
                                         href={item.href}
-                                        className={`relative flex flex-1 flex-col items-center justify-center py-2 transition-all duration-300`}
+                                        className={`relative flex flex-1 flex-col items-center justify-center py-2 transition-all duration-300 gap-0.5`}
                                     >
                                         {/* Active Top Bar */}
                                         {isActive && (
@@ -76,15 +76,18 @@ const CategoryNavbar = () => {
                                         </AnimatePresence>
 
                                         <div className="relative z-10 flex flex-col items-center gap-0.5 transition-all duration-300">
-                                            <Icon
-                                                size={22}
-                                                strokeWidth={isActive ? 2.5 : 2}
-                                                className={`${isActive
-                                                    ? 'text-brand-button'
-                                                    : 'text-[#282C3F]/80'
-                                                    } transition-colors duration-300`}
-                                            />
-                                            <span className={`text-[11px] font-bold tracking-wide transition-colors duration-300 ${isActive ? 'text-brand-button' : 'text-[#282C3F]/70'
+                                            <div className={`relative w-8 h-8 overflow-hidden transition-all duration-300 ${isActive ? 'border-brand-button scale-110 shadow-sm' : 'border-zinc-100 group-hover:border-zinc-200'
+                                                }`}>
+                                                <Image
+                                                    src={item.image}
+                                                    alt={item.label}
+                                                    fill
+                                                    sizes="32px"
+                                                    className={`object-cover transition-all duration-300 ${isActive ? 'grayscale-0' : 'grayscale-[0.5]'
+                                                        }`}
+                                                />
+                                            </div>
+                                            <span className={`text-[11px] font-bold tracking-tight transition-colors duration-300 ${isActive ? 'text-brand-button' : 'text-[#282C3F]/70'
                                                 }`}>
                                                 {item.label}
                                             </span>
