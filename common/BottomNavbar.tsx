@@ -1,13 +1,15 @@
 "use client";
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Info, BookOpen, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 
 const BottomNavbar = () => {
     const pathname = usePathname();
     const [cartCount, setCartCount] = useState(0);
+    const isVisible = useScrollVisibility(2000);
 
     const navItems = [
         { icon: Home, label: 'Home', href: '/' },
@@ -19,29 +21,12 @@ const BottomNavbar = () => {
     return (
         <div className="fixed bottom-0 left-0 right-0 z-[100] min-[427px]:hidden">
             <motion.nav
-                initial={{ y: 100 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                initial={{ y: 0 }}
+                animate={{ y: isVisible ? 0 : 100 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="w-full bg-white border-t border-zinc-100 shadow-[0_-15px_40px_rgba(0,0,0,0.06)]"
             >
                 <div className="flex items-center justify-around relative">
-                    {/* Active Top Indicator */}
-                    <div className="absolute top-0 left-0 right-0 h-[3px]">
-                        <div className="w-full h-full flex relative px-0">
-                            {navItems.map((item) => (
-                                <div key={item.label} className="flex-1 h-full relative">
-                                    {pathname === item.href && (
-                                        <motion.div
-                                            layoutId="active-nav-bar"
-                                            className="absolute inset-0 bg-brand-button"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
@@ -52,6 +37,16 @@ const BottomNavbar = () => {
                                 href={item.href}
                                 className={`relative flex flex-1 flex-col items-center justify-center py-3 transition-all duration-300`}
                             >
+                                {/* Active Top Bar - Full Width item */}
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="bottom-nav-active-bar"
+                                        className="absolute top-0 left-0 right-0 h-[3px] bg-brand-button z-20"
+                                        initial={false}
+                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                    />
+                                )}
+
                                 {/* Active Gradient Background */}
                                 <AnimatePresence>
                                     {isActive && (
@@ -60,13 +55,12 @@ const BottomNavbar = () => {
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
                                             transition={{ duration: 0.4 }}
-                                            className="absolute inset-0 bg-gradient-to-b from-brand-button/[0.08] via-brand-button/[0.04] to-transparent -z-10"
+                                            className="absolute inset-0 bg-gradient-to-b from-brand-button/[0.12] via-brand-button/[0.06] to-transparent z-0"
                                         />
                                     )}
                                 </AnimatePresence>
 
-                                <div className={`relative flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'translate-y-[-1px]' : ''
-                                    }`}>
+                                <div className="relative z-10 flex flex-col items-center gap-1 transition-all duration-300">
                                     <div className="relative">
                                         <Icon
                                             size={22}
